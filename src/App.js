@@ -20,13 +20,6 @@ const list = [
   }
 ];
 
-const pill = [
-  {
-    name: "Ifeoma",
-    height: 57
-  }
-];
-
 class App extends Component {
   constructor(props) {
     super(props);
