@@ -20,24 +20,41 @@ const list = [
   }
 ];
 
+function isSearched(searchTerm) {
+  return function (item) {
+    return (
+      !searchTerm || item.title.toLowerCase().includes(searchTerm.toLowerCase())
+    ); // some condition which returns true or false
+  };
+}
+
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { list: list };
-    this.onDismiss = this.onDismiss.bind(this);
+    this.state = { list, searchTerm: "" }; // defining initial state in constructor
+
+    this.onSearchChange = this.onSearchChange.bind(this);
+    this.onDismiss = this.onDismiss.bind(this); //f1rst this.onDismiss is for the onDismiss method and 'this' refers to the 'App' class componenet, the second this refers to the onDismiss method but with .bind called on it.
+  }
+
+  onSearchChange(event) {
+    //method arguments give access to the events e.g onChange
+    this.setState({ searchTerm: event.target.value }); // recahing for the value entered into the input field
   }
 
   onDismiss(id) {
-    const isNotId = (item) => item.objectID !== id;
-    const updatedList = this.state.list.filter(isNotId);
-    this.setState({ list: updatedList });
+    function isNotId(item) {
+      return item.objectID !== id;
+    }
+    const updatedList = this.state.list.filter(isNotId); //use the filter function to evaluate items on the iist
+    this.setState({ list: updatedList }); //update the list
   }
 
   render() {
     return (
       <div className="App">
         <form>
-          <input type="text" />
+          <input type="text" onChange={this.onSearchChange} />
         </form>
         {this.state.list.map((item) => (
           <div key={item.objectID}>
