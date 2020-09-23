@@ -37,7 +37,7 @@ class App extends Component {
     return (
       <div className="App">
         <form>
-          <input type="text" onChange={this.onSearchChange} />
+          <input type="text" />
         </form>
         {this.state.list.map((item) => (
           <div key={item.objectID}>
