@@ -1,2 +1,2 @@
 # hacker-news-app
-Created with CodeSandbox
+News app created with React used Hacker news app API 
