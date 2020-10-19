@@ -4,8 +4,8 @@ import "./styles.css";
 
 const list = [
   {
-    title: "React",
-    url: "https://facebook.github.io/react/",
+    title: "FEM Co",
+    url: "https://feministcoalition2020.com/",
     author: "Jane Doe",
     num_comments: 3,
     points: 4,
@@ -13,8 +13,8 @@ const list = [
   },
 
   {
-    title: "Redux",
-    url: "https://github.com/reactjs/redux",
+    title: "End SARS",
+    url: "https://twitter.com/feminist_co",
     author: "Jemila Don, Jamiu Dan",
     num_comments: 2,
     points: 5,
