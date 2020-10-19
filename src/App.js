@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import "./index.css";
+import "./styles.css";
 
 const list = [
   {
@@ -53,11 +55,13 @@ class App extends Component {
   render() {
     const { searchTerm, list } = this.state;
     return (
-      <div className="App">
-        <Search value={searchTerm} onChange={this.onSearchChange}>
-          {" "}
-          Search
-        </Search>
+      <div className="page">
+        <div className="interactions">
+          <Search value={searchTerm} onChange={this.onSearchChange}>
+            {" "}
+            Search
+          </Search>
+        </div>
         <Table
           list={list}
           pattern={searchTerm}
@@ -78,28 +82,28 @@ class Search extends Component {
   }
 }
 
-class Table extends Component {
-  render() {
-    const { list, pattern, onDismiss } = this.props;
-    return (
-      <div>
-        {list.filter(isSearched(pattern)).map((item) => (
-          <div key={item.objectID}>
+const Table = ({ list, pattern, onDismiss }) => (
+  <div className="table">
+    {list.filter(isSearched(pattern)).map((item) => (
+      <div key={item.objectID} className="table-row">
+        <span>
+          <a href={item.url}>{item.title}</a>
+        </span>{" "}
+        <span>{item.author}</span> <span>{item.num_comments}</span>{" "}
+        <span>{item.points}</span>{" "}
+        <span>
+          <Button
+            onClick={() => onDismiss(item.objectID)}
+            className="button-inline"
+          >
             {" "}
-            <span>
-              <a href={item.url}>{item.title}</a>{" "}
-            </span>
-            <span>{item.author}</span> <span>{item.num_comments}</span>{" "}
-            <span>{item.points}</span>{" "}
-            <span>
-              <Button onClick={() => onDismiss(item.objectID)}> Dismiss</Button>
-            </span>
-          </div>
-        ))}
+            Dismiss
+          </Button>
+        </span>
       </div>
-    );
-  }
-}
+    ))}
+  </div>
+);
 
 class Button extends Component {
   render() {
