@@ -2,6 +2,11 @@ import React, { Component } from "react";
 import "./index.css";
 import "./styles.css";
 
+const DEFAULT_QUERY = 'redux';
+const PATH_BASE = 'https://hn.algolia.com/api/v1'; 
+const PATH_SEARCH = '/search';
+const PARAM_SEARCH = 'query=';
+
 const list = [
   {
     title: "FEM Co",
@@ -13,7 +18,7 @@ const list = [
   },
 
   {
-    title: "End SARS",
+    title: "Linked",
     url: "https://twitter.com/feminist_co",
     author: "Jemila Don, Jamiu Dan",
     num_comments: 2,
@@ -33,11 +38,28 @@ function isSearched(searchTerm) {
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = { list, searchTerm: "" }; // defining initial state in constructor
+ //this.state = { list, searchTerm: "" }; defining initial state in constructor
 
-    this.onSearchChange = this.onSearchChange.bind(this);
-    this.onDismiss = this.onDismiss.bind(this); //f1rst this.onDismiss is for the onDismiss method and 'this' refers to the 'App' class componenet, the second this refers to the onDismiss method but with .bind called on it.
+ this.state = {
+  result: null,
+  searchTerm: DEFAULT_QUERY,
+};
+
+this.setSearchTopstories = this.setSearchTopstories.bind(this); 
+this.fetchSearchTopstories = this.fetchSearchTopstories.bind(this);
+this.onSearchChange = this.onSearchChange.bind(this);
+this.onDismiss = this.onDismiss.bind(this); //f1rst this.onDismiss is for the onDismiss method and 'this' refers to the 'App' class componenet, the second this refers to the onDismiss method but with .bind called on it.
   }
+
+  setSearchTopstories(result) { this.setState({ result });
+}
+fetchSearchTopstories(searchTerm) { fetch(`${PATH_BASE}${PATH_SEARCH}?${PARAM_SEARCH}${searchTerm}`)
+.then(response => response.json())
+.then(result => this.setSearchTopstories(result)); }
+componentDidMount() {
+const { searchTerm } = this.state; this.fetchSearchTopstories(searchTerm);
+}
+
 
   onSearchChange(event) {
     //method arguments give access to the events e.g onChange
@@ -53,7 +75,11 @@ class App extends Component {
   }
 
   render() {
-    const { searchTerm, list } = this.state;
+
+    const { searchTerm, result } = this.state;
+    if (!result) { return null; }
+
+   // const { searchTerm, list } = this.state;
     return (
       <div className="page">
         <div className="interactions">
@@ -63,7 +89,7 @@ class App extends Component {
           </Search>
         </div>
         <Table
-          list={list}
+          list={result.hits}
           pattern={searchTerm}
           onDismiss={this.onDismiss}
         />{" "}
@@ -86,12 +112,13 @@ const Table = ({ list, pattern, onDismiss }) => (
   <div className="table">
     {list.filter(isSearched(pattern)).map((item) => (
       <div key={item.objectID} className="table-row">
-        <span>
+        <span style={{ width: "40%" }}>
           <a href={item.url}>{item.title}</a>
         </span>{" "}
-        <span>{item.author}</span> <span>{item.num_comments}</span>{" "}
-        <span>{item.points}</span>{" "}
-        <span>
+        <span style={{ width: "30%" }}>{item.author} </span>
+        <span style={{ width: "10%" }}>{item.num_comments}</span>{" "}
+        <span style={{ width: "10%" }}>{item.points} </span>{" "}
+        <span style={{ width: "10%" }}>
           <Button
             onClick={() => onDismiss(item.objectID)}
             className="button-inline"
